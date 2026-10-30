@@ -1,0 +1,157 @@
+Ts automatically indentifies the type of value and implicitly assigns that indentifies type to the variable.
+
+Here are some implementation-based TypeScript questions on type inference, using only `let` and primitive types (`number`, `string`, `boolean`, `null`, `undefined`).
+
+Your task is to predict which lines compile, which produce errors, and what type TypeScript infers. Try to solve them without running the code.
+
+1. Variable reassignment
+
+Implement the missing lines so that the code compiles without using `any` or changing the initial declaration.
+
+let score = 100;
+
+// TODO: Assign 200
+// TODO: Assign "high"
+
+- Can both assignments work?
+- If not, which one fails and why?
+
+2. Type inference vs explicit annotation
+
+Fix the code with the smallest possible change.
+
+let age = 25;
+age = 30;
+age = "thirty";
+
+Requirements:
+
+- `age` must support both numbers and strings.
+- Do not use `any`.
+- Keep `let`.
+
+3. Implement a state transition
+
+Suppose a program tracks whether a user is logged in.
+
+let isLoggedIn = false;
+
+// TODO: Set it to true
+// TODO: Set it to "yes"
+
+Questions:
+
+- Which assignment is valid?
+- Modify the declaration so both `true`/`false` and `"yes"` can be assigned, without using `any`.
+
+4. The initialization trap
+
+Predict the type after each assignment.
+
+let value;
+
+value = 10;
+value = "hello";
+value = true;
+
+Then implement a safer version that accepts only numbers and strings, using no `any`.
+
+5. Fix the literal-type restriction
+
+let status: "pending" = "pending";
+
+status = "completed";
+
+Modify the declaration so both `"pending"` and `"completed"` are accepted, but `"failed"` is rejected.
+
+6. Implement a numeric counter
+
+Complete the code while keeping the variable restricted to numbers.
+
+let count = 0;
+
+count = count + 1;
+count = count + 1;
+
+// TODO: Make the following assignment invalid
+count = "2";
+
+Questions:
+
+- What type is inferred for `count`?
+- Why does TypeScript allow `count = 5` but reject `count = "2"`?
+
+7. Predict the type after reassignment
+
+let first = 10;
+let second = first;
+
+first = 20;
+second = "twenty";
+
+Your tasks:
+
+- Identify the inferred types of `first` and `second`.
+- Fix the code if `second` should accept both numbers and strings.
+- Explain why changing `first` doesn't change the type of `second`.
+
+8. Challenge: implement a variable with three primitive types
+
+Write a declaration for `result` that allows these assignments:
+
+result = 100;
+result = "success";
+result = true;
+
+Requirements:
+
+- Use `let`.
+- Do not use `any`.
+- Do not use objects, arrays, or functions.
+- Reject `null`.
+
+Answer key
+
+1. The numeric assignment works; the string assignment fails because `score` is inferred as `number`.
+
+2.
+let age: number | string = 25;
+age = 30;
+age = "thirty";
+
+3.
+let isLoggedIn: boolean | string = false;
+isLoggedIn = true;
+isLoggedIn = "yes";
+
+4. An uninitialized variable can behave as `any` in this context, depending on compiler settings. A safer declaration is:
+
+let value: number | string;
+value = 10;
+value = "hello";
+// value = true; // Error
+
+5.
+
+let status: "pending" | "completed" = "pending";
+status = "completed";
+// status = "failed"; // Error
+
+6. `count` is inferred as `number`. The final assignment fails because a string isn't assignable to `number`.
+
+7. Both variables are inferred as `number`. Reassignment doesn't change a variable's declared or inferred type.
+
+let first = 10;
+let second: number | string = first;
+second = "twenty";
+
+8.
+
+let result: number | string | boolean = 100;
+result = "success";
+result = true;
+// result = null; // Error with strictNullChecks enabled
+
+The union type `number | string | boolean` permits exactly those three categories of primitive values.
+
+Important distinction: Type inference determines a variable's type from its declaration and context. Reassigning a value does not normally cause TypeScript to permanently change that variable's inferred type. Use a union type when a variable must support multiple types.

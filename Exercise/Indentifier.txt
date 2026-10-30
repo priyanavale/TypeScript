@@ -1,0 +1,193 @@
+Here are 15 tricky questions to practice identifiers in TypeScript (TS), from basic traps to interview-level questions. Try answering them before checking the solutions!
+
+## Level 1: Spot the valid identifiers
+
+For each question, decide whether the identifier is Valid or Invalid in TypeScript.
+
+1. Which identifier is invalid?
+
+myVariable
+
+\_count
+
+$price
+
+2ndPlace 2ndPlace
+
+Correct! — An identifier cannot start with a digit.
+
+2. Which is a valid identifier?
+
+let
+
+letValue letValue
+
+class
+
+return
+
+Correct! — let, class, and return are reserved keywords.
+
+3. Is \`user-name\` a valid identifier?
+
+Yes
+
+No No
+
+Correct! — A hyphen is interpreted as the subtraction operator.
+
+4. Which identifier is valid?
+
+first name
+
+first\_name first\_name
+
+first@name
+
+first.name
+
+Correct! — Underscores are allowed; spaces, @, and dots are not allowed in ordinary identifiers.
+
+5. Are \`score\` and \`Score\` the same identifier?
+
+Yes
+
+No No
+
+Correct! — TypeScript is case-sensitive.
+
+ Check answers Score: 5/5
+
+ Try again
+
+## Level 2: Tricky TypeScript rules
+
+Predict whether each snippet compiles.
+
+### Question 6: Reserved keywords
+
+let class = "A";
+console.log(class);
+
+- A) Compiles successfully
+- B) Compilation error
+
+### Question 7: Special characters
+
+let $total = 100;
+let _value = 20;
+let #amount = 30;
+
+Which line causes an error?
+
+- A) `$total`
+- B) `_value`
+- C) `#amount`
+
+### Question 8: Unicode identifiers
+
+let café = "coffee";
+let π = 3.14;
+console.log(café, π);
+
+Does this compile?
+
+- A) Yes
+- B) No
+
+### Question 9: Duplicate declarations
+
+let count = 10;
+let count = 20;
+console.log(count);
+
+What happens?
+
+- A) Prints `20`
+- B) Prints `10`
+- C) Compilation error
+
+### Question 10: Case sensitivity
+
+let name = "Alex";
+let Name = "Sam";
+
+console.log(name, Name);
+
+What is the output?
+
+- A) `Alex Sam`
+- B) Compilation error
+- C) `Sam Sam`
+
+## Level 3: Interview challenge
+
+### Question 11: Can a variable name start with `$`?
+
+let $ = 50;
+console.log($);
+
+- A) Valid
+- B) Invalid
+
+### Question 12: Identifier or property name?
+
+const user = {
+  "first-name": "Ravi"
+};
+
+console.log(user["first-name"]);
+
+Is `"first-name"` allowed?
+
+- A) Yes
+- B) No
+
+### Question 13: The underscore trap
+
+let _ = 10;
+let __ = 20;
+let ___ = 30;
+
+Are these valid identifiers?
+
+- A) All valid
+- B) All invalid
+- C) Only `_` is valid
+
+### Question 14: Unicode escape
+
+let \u0061ge = 25;
+console.log(age);
+
+What happens?
+
+- A) Compilation error
+- B) Prints `25`
+- C) Prints `age`
+
+### Question 15: The tricky declaration
+
+let userName = "Sam";
+let username = "Ram";
+
+console.log(userName);
+console.log(username);
+
+Which statement is correct?
+
+- A) Duplicate identifier error
+- B) Both declarations are valid
+- C) The second variable overwrites the first
+
+## Answer key
+
+Try solving all 15 before opening this section.
+
+ Reveal answers and explanations Remember these five rules for exams and interviews:
+
+- Identifiers cannot start with digits.
+- Letters, digits, `_`, and `$` are commonly used in identifiers; Unicode letters are also supported.
+- Reserved keywords such as `class`, `return`, and `let` cannot be used as ordinary variable names.
+- TypeScript is case-sensitive: `total`, `Total`, and `TOTAL` are different.
+- Spaces and hyphens are not allowed in ordinary identifiers, but quoted object property names can contain them.

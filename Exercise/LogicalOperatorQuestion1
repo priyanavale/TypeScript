@@ -1,0 +1,98 @@
+question 1)
+Let's trace each line step by step in TypeScript (TS). The key concept here is the logical AND (`&&`) operator and how it returns values.
+
+## Code
+
+count = 10;
+
+count && console.log("Count exists");
+
+console.log(count && console.log("Count exists")); // undefined
+
+## Line-by-line execution
+
+### Line 1: `count = 10;`
+
+- Assigns the value `10` to `count`.
+- Now, `count = 10`.
+
+### Line 2: `count && console.log("Count exists");`
+
+The `&&` operator evaluates the left side first.
+
+1. `count` is `10`.
+2. Since `10` is a truthy value, JavaScript evaluates the right side.
+3. `console.log("Count exists")` executes and prints the message.
+4. `console.log()` returns `undefined`.
+
+Output:
+
+Count exists
+
+The entire expression evaluates to `undefined`, but that value isn't printed because we aren't passing the expression to another `console.log()`.
+
+### Line 3: `console.log(count && console.log("Count exists"));`
+
+Let's break down the nested expression:
+
+console.log(
+    count && console.log("Count exists")
+);
+
+1. `count` is `10`, which is truthy.
+2. Therefore, the right side of `&&` executes:
+   ts
+      console.log("Count exists")
+      Output:
+   text
+      Count exists
+   3. The inner `console.log("Count exists")` returns `undefined`.
+4. So the expression becomes:
+   ts
+      console.log(undefined);
+   5. The outer `console.log()` prints `undefined`.
+
+Output:
+
+Count exists
+undefined
+
+## Final output
+
+The complete program prints:
+
+Count exists
+Count exists
+undefined
+
+## Why does `&&` return `undefined`?
+
+The logical AND operator doesn't necessarily return `true` or `false`. It returns one of its operands.
+
+| Expression | Result |
+| --- | --- |
+| `10 && "Hello"` | `"Hello"` |
+| `0 && "Hello"` | `0` |
+| `10 && console.log("Hello")` | `undefined` |
+
+The rule is:
+
+- If the left operand is falsy, `&&` returns the left operand without evaluating the right operand.
+- If the left operand is truthy, `&&` evaluates and returns the right operand.
+
+In your code, `count` is `10`, so the right operand executes. Since `console.log()` returns `undefined`, the entire `&&` expression returns `undefined`.
+
+Remember: `console.log()` displays a value, but its own return value is always `undefined`.
+
+
+question 2)
+
+These values are falsy when JavaScript evaluates them as conditions:
+
+false
+0 and -0
+"" (empty string)
+null
+undefined
+NaN
+

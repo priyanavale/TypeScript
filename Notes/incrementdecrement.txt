@@ -1,0 +1,281 @@
+Here is the complete TypeScript increment (`++`) and decrement (`--`) guide with error messages written as comments, including CTE (Compile-Time Error) and RTE (Runtime Error) labels.
+
+Note: Exact TypeScript diagnostic wording can vary by compiler version. The messages below reflect common TypeScript diagnostics.
+
+## 1. Primitive types
+
+### A. `number` — no error
+
+let a: number = 10;
+
+console.log(a++); // 10
+console.log(a);   // 11
+
+console.log(++a); // 12
+console.log(a--); // 12
+console.log(--a); // 10
+
+// No CTE
+// No RTE
+
+### B. `string` — compile-time error
+
+let name: string = "John";
+
+name++;
+// CTE: TS2356: An arithmetic operand must be of type 'any',
+// 'number', 'bigint' or an enum type.
+
+name--;
+// CTE: TS2356: An arithmetic operand must be of type 'any',
+// 'number', 'bigint' or an enum type.
+
+Runtime behavior when using `any` to bypass type checking:
+
+let a: any = "10";
+
+console.log(a++); // 10
+console.log(a);   // 11
+
+let b: any = "abc";
+
+console.log(++b); // NaN
+
+// No RTE for these string values.
+// TypeScript's CTE is bypassed because the variables use any.
+
+### C. `boolean` — compile-time error
+
+let isActive: boolean = true;
+
+isActive++;
+// CTE: TS2356: An arithmetic operand must be of type 'any',
+// 'number', 'bigint' or an enum type.
+
+isActive--;
+// CTE: TS2356: An arithmetic operand must be of type 'any',
+// 'number', 'bigint' or an enum type.
+
+Runtime behavior:
+
+let a: any = true;
+console.log(a++); // 1
+console.log(a);   // 2
+
+let b: any = false;
+console.log(b--); // 0
+console.log(b);   // -1
+
+// No RTE. Boolean values are converted to numbers by JavaScript.
+
+### D. `bigint` — works
+
+let a: bigint = 10n;
+
+console.log(a++); // 10n
+console.log(a);   // 11n
+
+console.log(--a); // 10n
+
+// No CTE
+// No RTE
+
+Mixing BigInt and Number in arithmetic:
+
+let a: bigint = 10n;
+
+a = a + 1;
+// CTE: TS2365: Operator '+' cannot be applied to types
+// 'bigint' and 'number'.
+
+a = a + 1n; // Correct
+a++;        // Correct
+
+Runtime behavior if type checking is bypassed:
+
+let a: any = 10n;
+
+console.log(a + 1);
+// RTE: TypeError: Cannot mix BigInt and other types,
+// use explicit conversions.
+
+console.log(a + 1n); // 11n
+
+### E. `symbol` — compile-time error and runtime error
+
+let id: symbol = Symbol("id");
+
+id++;
+// CTE: TS2356: An arithmetic operand must be of type 'any',
+// 'number', 'bigint' or an enum type.
+
+id--;
+// CTE: TS2356: An arithmetic operand must be of type 'any',
+// 'number', 'bigint' or an enum type.
+
+Runtime behavior when bypassing TypeScript:
+
+let id: any = Symbol("id");
+
+id++;
+// RTE: TypeError: Cannot convert a Symbol value to a number
+
+### F. `null` — compile-time error
+
+let value: null = null;
+
+value++;
+// CTE: TS2356: An arithmetic operand must be of type 'any',
+// 'number', 'bigint' or an enum type.
+
+value--;
+// CTE: TS2356: An arithmetic operand must be of type 'any',
+// 'number', 'bigint' or an enum type.
+
+Runtime behavior:
+
+let a: any = null;
+
+console.log(a++); // 0
+console.log(a);   // 1
+
+let b: any = null;
+
+console.log(--b); // -1
+
+// No RTE. JavaScript converts null to 0.
+
+### G. `undefined` — compile-time error
+
+let value: undefined = undefined;
+
+value++;
+// CTE: TS2356: An arithmetic operand must be of type 'any',
+// 'number', 'bigint' or an enum type.
+
+value--;
+// CTE: TS2356: An arithmetic operand must be of type 'any',
+// 'number', 'bigint' or an enum type.
+
+Runtime behavior:
+
+let a: any = undefined;
+
+console.log(a++); // NaN
+console.log(a);   // NaN
+
+let b: any = undefined;
+
+console.log(--b); // NaN
+
+// No RTE. JavaScript converts undefined to NaN.
+
+## 2. Other common compile-time errors
+
+### A. Using `const`
+
+const x = 10;
+
+x++;
+// CTE: TS2588: Cannot assign to 'x' because it is a constant.
+
+x--;
+// CTE: TS2588: Cannot assign to 'x' because it is a constant.
+
+Fix:
+
+let x = 10;
+x++; // Correct
+
+### B. Union type: `number | string`
+
+let x: number | string = 10;
+
+x++;
+// CTE: TS2365: Operator '++' cannot be applied to types
+// 'string | number' and 'number'.
+// Note: Exact diagnostic wording may vary by TypeScript version.
+
+Fix:
+
+let x: number | string = 10;
+
+if (typeof x === "number") {
+  x++; // Correct
+}
+
+### C. Union type: `number | undefined`
+
+let count: number | undefined = 10;
+
+count++;
+// CTE: TS18048: 'count' is possibly 'undefined'.
+
+Fix:
+
+if (count !== undefined) {
+  count++; // Correct
+}
+
+### D. Readonly property
+
+const user: { readonly age: number } = { age: 25 };
+
+user.age++;
+// CTE: TS2540: Cannot assign to 'age' because it is a read-only property.
+
+Fix:
+
+const user: { age: number } = { age: 25 };
+
+user.age++; // Correct
+
+### E. Incrementing an expression
+
+let x = 10;
+
+(x + 1)++;
+// CTE: TS2357: The operand of an increment or decrement operator
+// must be a variable or a property access.
+
+Fix:
+
+x++;
+
+### F. Optional chaining
+
+type User = { age: number };
+
+let user: User | undefined;
+
+user?.age++;
+// CTE: TS2777: The operand of an increment or decrement operator
+// may not be an optional property access.
+// Diagnostic wording can vary by compiler version.
+
+Fix:
+
+if (user) {
+  user.age++;
+}
+
+## 3. Quick reference: CTE vs. RTE
+
+| Case | CTE? | RTE? |
+| --- | --- | --- |
+| `number++` | No | No |
+| `string++` with `string` type | Yes | Not if compilation stops |
+| `boolean++` with `boolean` type | Yes | Not if compilation stops |
+| `bigint++` | No | No |
+| `symbol++` with `symbol` type | Yes | Not if compilation stops |
+| `null++` with `null` type | Yes | Not if compilation stops |
+| `undefined++` with `undefined` type | Yes | Not if compilation stops |
+| `const x = 1; x++` | Yes | Not if compilation stops |
+| `Symbol` increment through `any` | No CTE | Yes |
+| `BigInt + Number` through `any` | No CTE | Yes |
+
+Remember:
+
+- CTE (Compile-Time Error): TypeScript rejects the code during type checking.
+- RTE (Runtime Error): JavaScript throws an exception when the code executes.
+- No RTE doesn't mean correct output: Some operations return unexpected values such as `NaN` without throwing an exception.

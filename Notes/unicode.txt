@@ -1,0 +1,44 @@
+Yes, but it depends on which Unicode escape syntax you use in JavaScript/TypeScript. There are two main formats.
+
+## 1. Unicode escape with `\u` — exactly 4 hexadecimal digits
+
+In this format, you must provide exactly four hexadecimal digits after `\u`.
+
+ts
+```
+console.log("\u0041"); // A
+console.log("\u0061"); // a
+console.log("\u0030"); // 0
+```
+
+Here, hexadecimal digits can be `0–9` and `A–F` (uppercase or lowercase).
+
+Incorrect examples:
+
+ts
+```
+console.log("\u041");   // ❌ Only 3 digits
+console.log("\u00041"); // ⚠️ Interpreted as \u0004 followed by "1"
+```
+
+## 2. Unicode escape with `\u{}` — variable number of hexadecimal digits
+
+You can use curly braces to specify a Unicode code point. This format supports 1 to 6 hexadecimal digits.
+
+ts
+```
+console.log("\u{41}");    // A
+console.log("\u{61}");    // a
+console.log("\u{1F600}"); // 😀
+```
+
+The value must represent a valid Unicode code point, from `0` to `10FFFF`.
+
+## Quick comparison
+
+| Syntax | Digits required | Example |
+| --- | --- | --- |
+| `\uXXXX` | Exactly 4 | `\u0041` → A |
+| `\u{X...}` | 1–6 | `\u{41}` → A |
+
+Remember: In `\uXXXX`, four hexadecimal digits are mandatory. In `\u{...}`, the number of hexadecimal digits can vary.

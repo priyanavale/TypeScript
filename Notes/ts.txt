@@ -1,0 +1,21 @@
+introduction
+values
+variables
+anatomy of variables
+types of ts 
+(number,bigint,string,boolean,null,undefined,any , unknown ,union, type inference)
+keywords
+typeof()
+identifiers
+
+operators 
+introduction
+arithmetic 
+assignment
+relational
+logical
+increment and decrement
+
+string concatenation 
+template literal 
+string interpolation 

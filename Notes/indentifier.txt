@@ -1,0 +1,344 @@
+Let's understand this error step by step in TypeScript (TS). The main issue is that you are trying to use a variable name that starts with a number.
+
+Your code is:
+
+let 123names: string = "Alex";
+
+You might expect this to create a variable called `123names` and assign `"Alex"` to it. However, TypeScript does not allow variable identifiers to start with a digit.
+
+Let's break down why this happens and what each error message means.
+
+## 1. Understanding the declaration
+
+First, let's divide your code into its individual parts.
+
+`let`
+
+Variable declaration keyword
+
+Tells TypeScript that you want to declare a variable.
+
+`123names`
+
+Variable identifier (invalid)
+
+The name starts with digits, so it cannot be used as a normal variable identifier.
+
+`: string`
+
+Type annotation
+
+Declares that the variable should hold string values.
+
+`= "Alex"`
+
+Assignment and initialization
+
+Assigns the string value `"Alex"` to the variable.
+
+The problem is specifically with `123names`. The other parts are valid TypeScript syntax when used with a valid identifier.
+
+## 2. Why can't a variable name start with a number?
+
+TypeScript follows JavaScript's rules for identifiers.
+
+An identifier is the name used to identify a variable, function, class, or other program element.
+
+For example, these are valid identifiers:
+
+let name = "Alex";
+let names123 = "Alex";
+let _names = "Alex";
+let $names = "Alex";
+let firstName = "Alex";
+let name123 = "Alex";
+
+But these are invalid:
+
+let 123names = "Alex";
+let 1name = "Alex";
+let 9age = 25;
+let 2026year = "Current year";
+
+The important distinction is:
+
+- `names123` is valid because it starts with a letter.
+- `_names` is valid because it starts with an underscore.
+- `$names` is valid because it starts with a dollar sign.
+- `123names` is invalid because it starts with a digit.
+
+### What is the rule?
+
+In ordinary TypeScript identifiers, the first character can be a letter, an underscore (`_`), a dollar sign (`$`), or certain Unicode identifier characters. A digit can appear after the first character, but it cannot be the first character.
+
+For example:
+
+| Identifier | Valid? | Reason |
+| --- | --- | --- |
+| `name` | Yes | Starts with a letter |
+| `Name` | Yes | Starts with a letter |
+| `_name` | Yes | Starts with `_` |
+| `$name` | Yes | Starts with `$` |
+| `name123` | Yes | Digits appear after the first character |
+| `123name` | No | Starts with a digit |
+| `1name` | No | Starts with a digit |
+| `name_123` | Yes | Starts with a letter |
+
+One detail: identifiers are case-sensitive, so `name`, `Name`, and `NAME` are three different names.
+
+## 3. Now let's understand each error message
+
+You received these messages:
+
+1. `An identifier or keyword cannot immediately follow a numeric literal.`
+2. `'string' only refers to a type, but is being used as a value here.`
+3. `';' expected.`
+4. `An identifier or keyword cannot immediately follow a numeric literal.`
+
+Why are there multiple errors for just one line?
+
+The important thing to understand is that the first syntax error can confuse the parser, causing it to interpret the rest of the line incorrectly. This can lead to additional error messages even though you made only one fundamental mistake.
+
+Let's examine each message.
+
+### Error 1: An identifier or keyword cannot immediately follow a numeric literal
+
+Your code:
+
+let 123names: string = "Alex";
+
+The parser encounters `123` first.
+
+In JavaScript and TypeScript, `123` is a valid numeric literal.
+
+For example:
+
+let age = 123;
+let price = 123.45;
+let count = 1000;
+
+A numeric literal is a number written directly in your code.
+
+Now look at this part:
+
+123names
+
+The parser can recognize `123` as a number, but it cannot treat `names` as a continuation of a valid identifier beginning with that number.
+
+It effectively encounters something resembling:
+
+123 names
+
+This is not valid syntax in that context. You cannot place an identifier directly after a numeric literal without a valid operator or other appropriate syntax.
+
+For example, this is valid:
+
+let result = 123 + 10;
+
+Here, `+` is an operator that connects the two numeric values.
+
+But this is invalid:
+
+let result = 123 names;
+
+There is no valid syntax connecting `123` and `names`.
+
+What does the error mean in simple English?
+
+The TypeScript parser is essentially saying:
+
+> "I recognized `123` as a number, but another identifier or keyword immediately follows it. I cannot interpret this combination as valid syntax."
+
+This error is a parsing error, not a complaint about the string value `"Alex"`.
+
+### Error 2: `'string' only refers to a type, but is being used as a value here`
+
+You wrote:
+
+: string
+
+Normally, this is perfectly valid TypeScript:
+
+let name: string = "Alex";
+
+Here, `string` is a type annotation. It tells TypeScript that `name` is expected to contain a string.
+
+However, because the parser has already encountered invalid syntax in `123names`, it may misinterpret the remaining tokens.
+
+It can end up interpreting `string` as though you were trying to use it as a runtime value rather than as a type.
+
+To understand the distinction, consider the following:
+
+let name: string = "Alex";
+
+In this declaration:
+
+- `name` is a variable identifier.
+- `string` is a TypeScript type.
+- `"Alex"` is a runtime string value.
+
+TypeScript types describe the kinds of values a program uses. Type annotations such as `: string` are removed when TypeScript is compiled to JavaScript.
+
+For example:
+
+let name: string = "Alex";
+
+The emitted JavaScript is conceptually:
+
+js
+let name = "Alex";
+
+There is no runtime variable or value called `string` created by the type annotation.
+
+What does this error mean in simple English?
+
+It means:
+
+> "`string` is a type name, but in the way I am interpreting your code, you appear to be using it as an ordinary value."
+
+In your original declaration, this is likely a secondary error caused by the invalid variable name and the resulting parser confusion. It does not mean that `string` is wrong in a normal type annotation.
+
+### Error 3: `';' expected.`
+
+A semicolon (`;`) can mark the end of a statement in TypeScript.
+
+For example:
+
+let name: string = "Alex";
+let age: number = 25;
+
+The parser expects the declaration to follow valid syntax. Because `123names` is not a valid identifier, the parser may fail to understand how the declaration is structured.
+
+It may then report that a semicolon was expected at some point where the code does not match its expected structure.
+
+What does this error mean in simple English?
+
+It means:
+
+> "Based on how I have interpreted the code so far, I expected the current statement to end here."
+
+It does not necessarily mean that you forgot a semicolon. Sometimes this message is simply a consequence of an earlier syntax error.
+
+Your original line already has a semicolon at the end:
+
+let 123names: string = "Alex";
+
+So adding another semicolon will not fix the actual problem.
+
+### Error 4: An identifier or keyword cannot immediately follow a numeric literal
+
+This is a repeated version of the first error.
+
+Once the parser becomes confused by the sequence `123names`, it can report the same problem at another location during its attempt to interpret or recover from the invalid declaration.
+
+You do not need to fix this repeated message separately. Fix the invalid identifier first, then check whether any errors remain.
+
+## 4. How to fix the code
+
+Here are a few correct alternatives.
+
+Option 1: Start with a letter
+
+Usually the clearest choice.
+
+let names123: string = "Alex";
+
+Output:
+
+text
+Alex
+
+Option 2: Start with an underscore
+let _123names: string = "Alex";
+
+Option 3: Start with a dollar sign
+let $123names: string = "Alex";
+
+All three declarations use valid identifiers. The variable's name can contain digits, provided the first character follows the identifier rules.
+
+## 5. What if you really want the name `"123names"`?
+
+There is an important distinction between a variable name and a string containing a name.
+
+You cannot write:
+let 123names: string = "Alex";
+
+But you can use a string as an object property name:
+const person = {
+  "123names": "Alex"
+};
+
+console.log(person["123names"]);
+
+Output:
+Alex
+
+Why does this work?
+
+In this example:
+
+- `person` is a valid variable identifier.
+- `"123names"` is a string used as an object property key.
+- `person["123names"]` accesses the property by its string key.
+
+Object property names written as strings can contain characters that ordinary variable identifiers cannot.
+
+You can also write:
+
+const person: { "123names": string } = {
+  "123names": "Alex"
+};
+
+console.log(person["123names"]);
+
+This is valid TypeScript because `"123names"` is being used as a property name, not as a variable identifier.
+
+Notice that this syntax:
+
+person["123names"]
+
+is different from:
+
+123names
+
+The first is a property access using a string key. The second is an invalid attempt to write an identifier starting with a digit.
+
+## 6. Why doesn't TypeScript automatically understand `123names` as one name?
+
+You might wonder why the compiler cannot simply treat the entire sequence as a variable name.
+
+The reason is that the language has rules for recognizing different kinds of tokens, including:
+
+- Identifiers, such as `names` and `age`.
+- Numeric literals, such as `123` and `45.6`.
+- Keywords, such as `let`, `const`, and `class`.
+- Punctuation and operators, such as `:`, `=`, `+`, and `;`.
+
+The sequence `123names` does not match the normal rules for an identifier because an identifier cannot begin with a digit.
+
+The compiler cannot simply assume that you intended to create a variable named `123names`, because that would conflict with how numeric literals are recognized in the language.
+
+Instead, the code must follow the language's syntax rules.
+
+
+## Final takeaway
+
+Your original declaration:
+
+let 123names: string = "Alex";
+
+fails because `123names` is not a valid TypeScript identifier. The compiler recognizes the beginning as a numeric literal (`123`) and cannot interpret the following `names` as part of a valid identifier.
+
+The other messages are likely consequences of that initial syntax error, rather than separate problems with `string`, the assigned value, or the semicolon.
+
+Remember this rule:
+
+- ✅ `name123` — valid
+- ❌ `123name` — invalid
+- ✅ `_123name` — valid
+- ✅ `$123name` — valid
+
+The simplest fix is:
+
+let names123: string = "Alex";
+```

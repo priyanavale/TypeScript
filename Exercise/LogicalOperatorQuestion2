@@ -1,0 +1,119 @@
+Let's trace each line step by step in TypeScript. The key concept is the logical AND (`&&`) operator and falsy values.
+
+## Code
+
+let age = 0;
+let result = age && age + 10;
+console.log(result); // 0
+
+## Line-by-line execution
+
+### Line 1: `let age = 0;`
+
+- Declares a variable named `age`.
+- Assigns the value `0` to it.
+
+Current value: age = 0;
+
+### Line 2: `let result = age && age + 10;`
+
+The `&&` operator evaluates the left operand first.
+
+1. `age` is `0`.
+2. In JavaScript/TypeScript, `0` is a falsy value.
+3. Because the left operand is falsy, `&&` does not evaluate the right operand.
+4. The `&&` expression returns the left operand itself, which is `0`.
+5. Therefore, `result` receives `0`.
+
+Equivalent outcome:
+
+let result = 0;
+
+### Line 3: `console.log(result);`
+
+- `result` contains `0`.
+- `console.log()` prints its value.
+
+Output:
+0
+
+## Final output
+0
+
+## Why doesn't it return `10`?
+
+You might expect `age + 10` to produce `10`, because `0 + 10 = 10`.
+
+However, the `&&` operator uses short-circuit evaluation. Since `age` is `0` (falsy), the right-hand expression `age + 10` is never evaluated.
+
+| Expression | Result | Why? |
+| --- | --- | --- |
+| `0 && 0 + 10` | `0` | Left operand is falsy |
+| `5 && 5 + 10` | `15` | Left operand is truthy |
+| `null && null + 10` | `null` | Left operand is falsy |
+| `undefined && 10` | `undefined` | Left operand is falsy |
+
+Remember: `&&` does not always return `true` or `false`. It returns the first falsy operand, or the last evaluated operand if all previous operands are truthy.
+
+
+question 2
+
+
+## Code
+
+age = 10;
+result = age && age + 10;
+console.log(result);
+```
+
+## Line-by-line execution
+
+### Line 1: `age = 10;`
+
+- Assigns `10` to the variable `age`.
+- `10` is a truthy value.
+
+Current value:
+
+age = 10;
+```
+
+### Line 2: `result = age && age + 10;`
+
+The `&&` operator evaluates the left operand first.
+
+1. `age` is `10`.
+2. Since `10` is truthy, JavaScript evaluates the right operand.
+3. The right operand is `age + 10`.
+4. Therefore, `10 + 10 = 20`.
+5. The `&&` expression returns `20`.
+6. So, `result` becomes `20`.
+
+Equivalent outcome:
+
+result = 20;
+```
+
+### Line 3: `console.log(result);`
+
+- `result` contains `20`.
+- `console.log()` prints that value.
+
+Output:
+
+20
+```
+
+## Final output
+
+20
+```
+
+## Compare both examples
+
+| Expression | Left operand | Result |
+| --- | --- | --- |
+| `0 && 0 + 10` | `0` (falsy) | `0` |
+| `10 && 10 + 10` | `10` (truthy) | `20` |
+
+Remember: When the left operand of `&&` is truthy, the right operand is evaluated, and its value becomes the result of the expression.

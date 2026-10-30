@@ -1,0 +1,458 @@
+Let's cover number-type variable declaration and initialization errors in TypeScript, including syntax errors, type mismatches, literal types, special types, and compiler settings.
+
+The examples below assume TypeScript with `"strict": true`, unless mentioned otherwise.
+
+## 1\. Valid ways to declare a number variable
+
+ts
+```
+let a: number = 10;  // Declaration + initialization
+let b: number;       // Declaration only
+b = 20;              // Initialization later
+
+let c = 30;          // Type inferred as number
+const d = 40;        // Type inferred as literal type 40
+```
+
+Important distinction:
+
+- `let a: number = 10` — explicitly declares the type.
+- `let a = 10` — TypeScript infers `number`.
+- `const a = 10` — TypeScript usually infers the literal type `10`.
+
+## 2\. Type mismatch errors during initialization
+
+### A. String instead of number
+
+ts
+```
+let a: number = "10";
+```
+
+Error:
+
+text
+```
+Type 'string' is not assignable to type 'number'.
+```
+
+Even though `"10"` looks numeric, it is a string.
+
+### B. Boolean instead of number
+
+ts
+```
+let a: number = true;
+```
+
+Error:
+
+text
+```
+Type 'boolean' is not assignable to type 'number'.
+```
+
+### C. `null` instead of number
+
+ts
+```
+let a: number = null;
+```
+
+With `strictNullChecks: true`:
+
+text
+```
+Type 'null' is not assignable to type 'number'.
+```
+
+Fix:
+
+ts
+```
+let a: number | null = null;
+```
+
+### D. `undefined` instead of number
+
+ts
+```
+let a: number = undefined;
+```
+
+With strict null checking:
+
+text
+```
+Type 'undefined' is not assignable to type 'number'.
+```
+
+Fix:
+
+ts
+```
+let a: number | undefined = undefined;
+```
+
+### E. BigInt instead of number
+
+ts
+```
+let a: number = 10n;
+```
+
+Error:
+
+text
+```
+Type 'bigint' is not assignable to type 'number'.
+```
+
+`number` and `bigint` are separate JavaScript types.
+
+### F. Object instead of number
+
+ts
+```
+let a: number = { value: 10 };
+```
+
+Error:
+
+text
+```
+Type '{ value: number; }' is not assignable to type 'number'.
+```
+
+### G. Array instead of number
+
+ts
+```
+let a: number = [10, 20, 30];
+```
+
+Error:
+
+text
+```
+Type 'number[]' is not assignable to type 'number'.
+```
+
+### H. Function instead of number
+
+ts
+```
+let a: number = () => 10;
+```
+
+Error: the function type is not assignable to `number`.
+
+Correct:
+
+ts
+```
+let a: number = (() => 10)();
+```
+
+The function call `()` returns the numeric value `10`.
+
+## 3\. Literal type mismatches
+
+A literal type represents one exact value, unlike a general type.
+
+ts
+```
+let a: 10 = 10;
+
+a = 20;
+```
+
+Error:
+
+text
+```
+Type '20' is not assignable to type '10'.
+```
+
+Compare:
+
+ts
+```
+let a: number = 10;
+
+a = 20; // Valid
+```
+
+The type `number` accepts any number, whereas the literal type `10` accepts only `10`.
+
+Other examples:
+
+ts
+```
+let a: 10 = 10.5;  // Error: 10.5 is not assignable to 10
+let b: 0 = 1;      // Error: 1 is not assignable to 0
+let c: -5 = 5;     // Error: 5 is not assignable to -5
+```
+
+## 4\. Type mismatches involving other variables
+
+The compiler's error message depends on the declared type of the source variable.
+
+ts
+```
+let a: number;
+
+let b: string = "hello";
+a = b;
+```
+
+Error:
+
+text
+```
+Type 'string' is not assignable to type 'number'.
+```
+
+Now consider:
+
+ts
+```
+let a: number;
+
+let b: number = 10;
+a = b; // Valid
+```
+
+And with a literal type:
+
+ts
+```
+let a: number;
+
+let b: 10 = 10;
+a = b; // Valid
+```
+
+The literal type `10` is assignable to the broader type `number`.
+
+## 5\. Special types: `any`, `unknown`, `never`, and `void`
+
+| Code | Result | Explanation |
+| --- | --- | --- |
+| `let a: number = 10 as any;` | Valid | `any` bypasses normal type checking |
+| `let b: unknown = 10; let a: number = b;` | Error | `unknown` must be narrowed first |
+| `let a: number = (10 as never);` | Valid | `never` is assignable to every type |
+| `let a: number = undefined as void;` | Error | `void` is not assignable to `number` |
+| `let a: number = NaN;` | Valid | `NaN` has type `number` |
+| `let a: number = Infinity;` | Valid | `Infinity` has type `number` |
+
+For `unknown`, you can check the type first:
+
+ts
+```
+let value: unknown = 10;
+
+if (typeof value === "number") {
+  let a: number = value; // Valid
+}
+```
+
+## 6\. Declaration and syntax errors
+
+These are not ordinary type mismatches; they are declaration or syntax problems.
+
+| Code | Problem |
+| --- | --- |
+| `let a: number = ;` | Missing initializer expression |
+| `let a: = 10;` | Missing type annotation |
+| `let: number = 10;` | Invalid declaration syntax |
+| `let a: number =` | Incomplete statement |
+| `let a: number = 10` followed by `let a: number = 20` in the same scope | Duplicate declaration |
+| `const a: number;` | `const` requires an initializer |
+| `let a: number = "10"` | Valid syntax, but a type mismatch |
+
+A declaration without initialization is valid for `let`:
+
+ts
+```
+let a: number;
+```
+
+However, reading it before assigning a value produces an error:
+
+ts
+```
+let a: number;
+console.log(a);
+```
+
+Typical diagnostic:
+
+text
+```
+Variable 'a' is used before being assigned.
+```
+
+Fix:
+
+ts
+```
+let a: number = 0;
+console.log(a);
+```
+
+## 7\. Values that are valid numbers but may behave unexpectedly
+
+These do not cause TypeScript type errors:
+
+ts
+```
+let a: number = NaN;
+let b: number = Infinity;
+let c: number = -Infinity;
+let d: number = 1e1000;
+```
+
+All are valid assignments. Note that `1e1000` evaluates to `Infinity` in JavaScript.
+
+For runtime validation, use:
+
+ts
+```
+let a: number = Number("hello"); // Compiles, but produces NaN
+
+if (Number.isFinite(a)) {
+  console.log("Finite number");
+} else {
+  console.log("Not a finite number");
+}
+```
+
+TypeScript checks types, but it does not guarantee that a numeric value is finite or meaningful.
+
+## 8\. How `strictNullChecks` changes the result
+
+With strict null checking enabled:
+
+ts
+```
+let a: number = null;      // Error
+let b: number = undefined; // Error
+```
+
+With it disabled, these assignments are generally allowed.
+
+You can enable strict checking in `tsconfig.json`:
+
+json
+```
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
+```
+
+## 9\. Practice: predict the errors
+
+Choose whether each example is valid or produces an error.
+
+1. Is this valid?
+
+let a: number = "25";
+
+Valid
+
+Error Error
+
+Correct!
+
+A string is not assignable to number.
+
+2. Is this valid?
+
+let a: number = 25;
+
+Valid Valid
+
+Error
+
+Correct!
+
+25 is a numeric value.
+
+3. Is this valid?
+
+let a: 25 = 30;
+
+Valid
+
+Error Error
+
+Correct!
+
+The literal type 25 accepts only the exact value 25.
+
+4. Is this valid?
+
+let a: number = NaN;
+
+Valid Valid
+
+Error
+
+Correct!
+
+NaN has the TypeScript type number.
+
+5. Is this valid?
+
+let a: number = null;
+
+Valid
+
+Error Error
+
+Correct!
+
+With strictNullChecks enabled, null is not assignable to number.
+
+6. Is this valid?
+
+let a: number; console.log(a);
+
+Valid
+
+Error Error
+
+Correct!
+
+The variable is read before it has been assigned.
+
+7. Is this valid?
+
+let a: number = 10n;
+
+Valid
+
+Error Error
+
+Correct!
+
+bigint and number are distinct types.
+
+8. Is this valid?
+
+let a: number = 10 as any;
+
+Valid Valid
+
+Error
+
+Correct!
+
+The any type bypasses ordinary assignment checks.
+
+ Reset practice
+
+Final takeaway: A variable declared as `number` accepts values whose types are assignable to `number`. The most common errors are assigning incompatible types, assigning the wrong literal value to a literal type, and reading a variable before initialization. Syntax errors and runtime problems are separate categories.

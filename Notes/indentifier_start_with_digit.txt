@@ -1,0 +1,79 @@
+## Error 1: `An identifier or keyword cannot immediately follow a numeric literal.`
+
+1. An identifier is a name used to identify a variable, function, or other program element, such as `name`, `age`, or `student`.
+2. A numeric literal is a number written directly in the code, such as `123`, `10`, or `500`.
+3. In your code, `123names` starts with `123`, which TypeScript recognizes as a numeric literal rather than the beginning of a variable name.
+4. After recognizing `123`, TypeScript encounters `names` immediately afterward, but there is no valid syntax connecting the number and the identifier.
+5. Therefore, TypeScript reports that an identifier or keyword cannot immediately follow a numeric literal in this context.
+6. Solution: Start the variable name with a letter, underscore, or dollar sign, such as `names123`, `_123names`, or `$123names`.
+
+## Error 2: `'string' only refers to a type, but is being used as a value here.`
+
+1. In TypeScript, `string` is a type that describes text values, such as `"Alex"`, `"John"`, and `"Hello"`.
+2. When you write `let name: string = "Alex";`, the `string` keyword correctly specifies the type of the variable.
+3. However, your original declaration contains invalid syntax in `123names`, which can confuse TypeScript's parser.
+4. As a result, TypeScript may interpret the later `string` token as a runtime value rather than as a type annotation.
+5. The error means that TypeScript sees `string` being used in a position where a value is expected, even though `string` is a type in this context.
+6. Solution: Correct the variable name first; `let names123: string = "Alex";` uses the `string` type correctly.
+
+## Error 3: `';' expected.`
+
+1. A semicolon (`;`) is used to mark the end of a statement in TypeScript, although JavaScript and TypeScript can often insert semicolons automatically.
+2. For example, `let name: string = "Alex";` is a valid declaration ending with a semicolon.
+3. In your code, TypeScript encounters the invalid identifier `123names` and cannot parse the declaration as intended.
+4. While trying to interpret the remaining code, the parser may reach a point where it expects the statement to end.
+5. It then reports `';' expected.` because the code does not match the syntax structure it expects.
+6. Solution: You do not need to add another semicolon; fix the invalid identifier to resolve the underlying syntax problem.
+
+## Error 4: `An identifier or keyword cannot immediately follow a numeric literal.` (repeated)
+
+1. This message repeats the first error because the parser encounters the same invalid sequence involving `123` and `names`.
+2. The sequence `123names` cannot be interpreted as a single valid variable identifier under TypeScript's naming rules.
+3. After recognizing `123` as a numeric literal, TypeScript cannot treat the following `names` as a valid continuation of that number in this declaration.
+4. When the parser tries to recover from the syntax error, it may report the same issue again at another position.
+5. This repeated message does not necessarily indicate a new or independent mistake in your code.
+6. Solution: Fix the original variable name, for example, `let names123: string = "Alex";`, and then check whether any errors remain.
+
+### Corrected code
+
+let names123: string = "Alex";
+console.log(names123);
+
+Output:
+Alex
+
+Remember: The first error is the root problem. The other errors may be secondary messages caused by the parser's attempt to interpret the invalid declaration.
+
+let emp id: number = 20;
+// ',' expected.
+
+Error: ',' expected.
+let is a valid keyword used to declare a variable in TypeScript.
+emp id is invalid as a single variable name because it contains a space between emp and id. A normal TypeScript identifier cannot contain spaces.
+When TypeScript encounters emp, it recognizes it as an identifier, but then it encounters id as a separate identifier because of the space.
+The parser tries to interpret these tokens according to the syntax rules and may expect a comma between them, which is why it reports ',' expected.
+This is a syntax error (parsing error), not a type error. The type annotation number and the assigned value 20 are both valid.
+Solution: Remove the space or replace it with an underscore to create a valid variable name.
+
+let if: string = "hi";
+// '(' expected.
+// 'string' only refers to a type, but is being used as a value here.
+The main problem is that if is a reserved keyword in TypeScript, so you cannot use it as a variable name.
+
+Error 1: '(' expected.
+The keyword if is reserved in TypeScript and is used to create conditional statements.
+For example, if (age > 18) checks whether the condition age > 18 is true.
+
+When the compiler encounters let if, it cannot interpret if as a valid variable identifier because it already has a special meaning in the language.
+The parser may interpret if as the beginning of an if statement and expect an opening parenthesis ( for a condition.
+Because your code does not follow the expected syntax for an if statement, TypeScript reports '(' expected.
+Solution: Choose a different variable name, such as message, ifValue, or status.
+
+
+Error 2: 'string' only refers to a type, but is being used as a value here.
+In TypeScript, string is a type used to describe text values, such as "hi" and "hello".
+Normally, let message: string = "hi"; is a valid declaration because string is used correctly as a type annotation.
+In your code, the reserved keyword if causes the parser to misunderstand the structure of the declaration.
+Because of this parsing confusion, the compiler may interpret string as a runtime value instead of a type.
+It then reports that string is being used as a value in a context where it only refers to a type.
+Solution: Rename if to a valid identifier; the string type annotation itself is correct.

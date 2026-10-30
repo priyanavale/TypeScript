@@ -1,0 +1,154 @@
+# How to execute TypeScript using `tsx`
+
+`tsx` allows you to execute a `.ts` file directly without manually compiling it into a separate `.js` file first.
+
+Let's do it step by step.
+
+## 1. Install Node.js
+
+First, verify that Node.js and npm are installed:
+
+bash
+
+```
+node -v
+npm -v
+```
+
+If they are not installed, download Node.js from [the official Node.js website](<https://nodejs.org/?utm_source=chatgpt.com>).
+
+## 2. Create a project
+
+Run these commands in your terminal:
+
+bash
+
+```
+mkdir tsx-demo
+cd tsx-demo
+npm init -y
+```
+
+This creates a project directory and a `package.json` file.
+
+## 3. Install `tsx`
+
+Install `tsx` as a development dependency:
+
+bash
+
+```
+npm install -D tsx
+```
+
+This adds `tsx` to your project and installs it inside `node_modules`.
+
+## 4. Create a TypeScript file
+
+Create a file named `app.ts` inside the project.
+
+typescript
+
+```
+
+function add(a: number, b: number): number {
+  return a + b;
+}
+
+const result: number = add(10, 20);
+
+console.log("Result:", result);
+```
+
+Save the file.
+
+## 5. Execute the TypeScript code
+
+In the terminal, run:
+
+bash
+
+```
+npx tsx app.ts
+```
+
+Output:
+
+text
+
+```
+Result: 30
+```
+
+That's it\! You have executed a TypeScript file using `tsx`.
+
+## 6. What happens internally?
+
+`app.ts`
+
+TypeScript source code
+
+`npx tsx app.ts`
+
+tsx transforms the TypeScript for execution
+
+Node.js
+
+Executes the resulting JavaScript
+
+Output: `Result: 30`
+
+Unlike the traditional `tsc` workflow, you don't need to manually create an output file such as `app.js`. `tsx` handles the transformation needed to run the code.
+
+Important: `tsx` does not automatically type-check your entire program. To check for TypeScript errors, run:
+
+bash
+
+```
+npx tsc --noEmit
+```
+
+For this command, you should also install TypeScript:
+
+bash
+
+```
+npm install -D typescript
+```
+
+## 7. Run the file using an npm script
+
+You can also configure `package.json` to avoid typing `npx tsx` each time.
+
+Add a script to the existing `"scripts"` section:
+
+json
+
+```
+"scripts": {
+  "dev": "tsx app.ts"
+}
+```
+
+Then execute:
+
+bash
+
+```
+npm run dev
+```
+
+Output:
+
+text
+
+```
+Result: 30
+```
+
+### Remember
+
+- `npm install -D tsx` — installs the tool.
+- `npx tsx app.ts` — executes the TypeScript file.
+- `npm run dev` — executes the configured development script.
+- `npx tsc --noEmit` — checks TypeScript types without generating JavaScript.

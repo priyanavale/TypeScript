@@ -1,0 +1,119 @@
+In TypeScript, we use single quotes (`' '`), double quotes (`" "`), and backticks (`` ` ` ``) to represent strings.
+
+The main reason TypeScript allows both single and double quotes is flexibility and convenience. Both represent strings in exactly the same way.
+
+## 1. Single quotes vs. double quotes
+
+typescript
+```
+let name1: string = 'John';
+let name2: string = "John";
+
+console.log(name1); // John
+console.log(name2); // John
+```
+
+Both are valid, and both have the same type: `string`.
+
+There is no functional difference between them in TypeScript.
+
+## 2. Why do we need both?
+
+The main advantage is that we can write strings containing quotation marks more easily.
+
+Example 1: Using single quotes
+
+typescript
+```
+let message = "It's a beautiful day";
+```
+
+We use double quotes outside because the word `It's` contains a single quote.
+
+Example 2: Using double quotes
+
+typescript
+```
+let message = 'He said "Hello"';
+```
+
+We use single quotes outside because `Hello` is surrounded by double quotes.
+
+If we used the same type of quote inside and outside, we would need to escape the inner quote using a backslash (`\`).
+
+typescript
+```
+let message1 = 'It\'s a beautiful day';
+let message2 = "He said \"Hello\"";
+```
+
+So, having both options makes writing strings easier.
+
+## 3. What about backticks (`` ` ` ``)?
+
+Backticks are different because they support template literals, which allow us to insert variables directly into strings.
+
+typescript
+```
+let name = "John";
+let age = 25;
+
+let message = `My name is ${name} and I am ${age} years old.`;
+
+console.log(message);
+// My name is John and I am 25 years old.
+```
+
+With single or double quotes, `${name}` would not be replaced with the variable's value.
+
+typescript
+```
+let message = 'My name is ${name}';
+
+console.log(message);
+// My name is ${name}
+```
+
+Backticks also allow multiline strings:
+
+typescript
+```
+let message = `Hello John,
+Welcome to TypeScript!
+Have a nice day.`;
+```
+
+## 4. Quick comparison
+
+| Feature | Single quotes `' '` | Double quotes `" "` | Backticks `` ` ` `` |
+| --- | --- | --- | --- |
+| Create strings | Yes | Yes | Yes |
+| Same string behavior | Yes | Yes | Mostly, but with extra features |
+| Insert variables with `${}` | No | No | Yes |
+| Multiline strings | No, not directly | No, not directly | Yes |
+| Escape quotes when needed | Yes | Yes | Yes |
+
+## 5. Which one should you use?
+
+You can use either single or double quotes. The important thing is to be consistent throughout your project.
+
+For example:
+
+typescript
+```
+// Single-quote style
+let city = 'Bengaluru';
+let country = 'India';
+
+// Double-quote style
+let city = "Bengaluru";
+let country = "India";
+```
+
+Both are correct. Tools such as ESLint and Prettier can enforce a consistent style.
+
+Remember:
+
+- `' '` and `" "` are interchangeable for ordinary strings.
+- `` ` ` `` is useful when you need variable interpolation or multiline strings.
+- TypeScript supports all three because it follows JavaScript's string syntax.

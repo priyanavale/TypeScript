@@ -1,0 +1,120 @@
+The reason is that TypeScript reports the type of the actual value you are assigning, not just the general type category you might expect.
+
+Your code:
+
+ts
+```
+let a: null = null;
+console.log(a);
+
+a = 20;
+```
+
+TypeScript gives this error:
+
+text
+```
+Type '20' is not assignable to type 'null'.
+```
+
+Let's understand why it says `20` instead of `number`.
+
+## 1. `20` is a literal type
+
+In TypeScript, there is a difference between the type `number` and the literal type `20`.
+
+- `number` represents numbers in general, such as `10`, `20`, `50`, and `3.14`.
+- `20` represents only the exact value `20`.
+
+For example:
+
+ts
+```
+let x: number = 20; // Valid
+
+let y: 20 = 20;     // Valid
+y = 30;             // Error: Type '30' is not assignable to type '20'
+```
+
+The type `20` is called a numeric literal type.
+
+## 2. Why does your code show `Type '20'`?
+
+Consider your variable declaration:
+
+ts
+```
+let a: null = null;
+```
+
+Here, you've explicitly declared that `a` can hold only the value `null`.
+
+When you write:
+
+ts
+```
+a = 20;
+```
+
+TypeScript checks two things:
+
+- Source type: The assigned value `20` has the numeric literal type `20`.
+- Target type: The variable `a` has the type `null`.
+
+Since `20` cannot be assigned to a variable that accepts only `null`, TypeScript reports:
+
+text
+```
+Type '20' is not assignable to type 'null'.
+```
+
+It doesn't report `number` because the value `20` is inferred as the more specific literal type `20` in this assignment error.
+
+## 3. When would TypeScript say `number` instead?
+
+If you assign a variable whose type is already `number`, the error changes:
+
+ts
+```
+let a: null = null;
+
+let b: number = 20;
+
+a = b;
+```
+
+Error:
+
+text
+```
+Type 'number' is not assignable to type 'null'.
+```
+
+Why? Because `b` is declared as type `number`, so TypeScript uses `number` as the source type rather than the literal type `20`.
+
+## 4. Try comparing these examples
+
+| Code | Source type in the error | Target type |
+| --- | --- | --- |
+| `a = 20` | `20` | `null` |
+| `a = 3.14` | `3.14` | `null` |
+| `a = b`, where `b: number` | `number` | `null` |
+| `a = "hello"` | `"hello"` | `null` |
+
+The exact wording can vary with the TypeScript version and context, but the underlying type-checking principle is the same.
+
+Remember: TypeScript distinguishes between a general type, such as `number`, and a specific literal type, such as `20`. The error message identifies the source type that fails the assignment check.
+
+
+General types
+ts
+let a: number = 20;
+let b: string = "hello";
+let c: boolean = true;
+These variables can hold multiple values of their declared types.
+
+Literal types
+ts
+let a: 20 = 20;
+let b: "hello" = "hello";
+let c: true = true;

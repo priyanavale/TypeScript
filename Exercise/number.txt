@@ -1,0 +1,215 @@
+Here are 15 tricky TypeScript questions on the `number` data type, including type inference, decimals, `NaN`, `Infinity`, and tricky outputs. Try solving them before checking the answers.
+
+## Level 1: Predict the output
+
+1. What is the output?
+
+let x: number = 10; console.log(typeof x);
+
+number number
+
+integer
+
+object
+
+undefined
+
+Correct! — JavaScript uses the type string "number" for numeric values.
+
+2. What is the output?
+
+let x: number = 10 / 0; console.log(x);
+
+0
+
+Infinity Infinity
+
+Error
+
+NaN
+
+Correct! — Dividing a positive number by zero produces Infinity.
+
+3. What is the output?
+
+let x: number = 0 / 0; console.log(x);
+
+0
+
+Infinity
+
+NaN NaN
+
+Error
+
+Correct! — Zero divided by zero produces NaN.
+
+4. What is the output?
+
+console.log(typeof NaN);
+
+NaN
+
+undefined
+
+number number
+
+boolean
+
+Correct! — NaN is a special numeric value, and its type is number.
+
+5. What is the output?
+
+let x: number = 5.5; console.log(Number.isInteger(x));
+
+true
+
+false false
+
+Error
+
+undefined
+
+Correct! — 5.5 is a number, but it is not an integer.
+
+ Check answers ## Score: 5/5
+
+ Try again
+
+## Level 2: TypeScript number traps
+
+Choose the correct answer for each question.
+
+### 6. Is this valid TypeScript?
+
+ts
+```
+let age: number = "25";
+```
+
+- A) Valid
+- B) Compilation error
+- C) Automatically converts `"25"` to `25`
+
+### 7. What is the output?
+
+ts
+```
+let x: number = 10;
+console.log(x + "5");
+```
+
+- A) `15`
+- B) `105`
+- C) Compilation error
+- D) `NaN`
+
+### 8. What is the output?
+
+ts
+```
+let x: number = 5;
+console.log(x / 2);
+```
+
+- A) `2`
+- B) `2.5`
+- C) `3`
+- D) Compilation error
+
+### 9. What is the output?
+
+ts
+```
+console.log(0.1 + 0.2 === 0.3);
+```
+
+- A) `true`
+- B) `false`
+- C) Compilation error
+
+### 10. What is the output?
+
+ts
+```
+let x: number = NaN;
+console.log(x === NaN);
+```
+
+- A) `true`
+- B) `false`
+- C) Compilation error
+
+## Level 3: Tricky interview questions
+
+### 11. What happens here?
+
+ts
+```
+let x: number = Infinity;
+console.log(x > 1000000);
+```
+
+- A) `true`
+- B) `false`
+- C) Compilation error
+
+### 12. What is the output?
+
+ts
+```
+console.log(typeof (10 / 0));
+```
+
+- A) `"Infinity"`
+- B) `"number"`
+- C) `"undefined"`
+
+### 13. What happens here?
+
+ts
+```
+let a: number = 10;
+a = NaN;
+a = Infinity;
+console.log(a);
+```
+
+- A) Compilation error
+- B) Prints `NaN`
+- C) Prints `Infinity`
+
+### 14. What is the output?
+
+ts
+```
+console.log(Math.floor(-2.3));
+```
+
+- A) `-2`
+- B) `-3`
+- C) `2`
+
+### 15. What happens here?
+
+ts
+```
+let x: number = 10;
+console.log(x.toFixed(2));
+console.log(typeof x.toFixed(2));
+```
+
+- A) `10.00`, then `"number"`
+- B) `10`, then `"number"`
+- C) `10.00`, then `"string"`
+
+## Answer key
+
+ Reveal answers with explanations (6–15) ## Quick revision: `number` in TypeScript
+
+- `number` includes integers, decimals, `NaN`, `Infinity`, and `-Infinity`.
+- TypeScript does not have separate built-in `int` and `float` types.
+- `"25"` is a string, while `25` is a number.
+- `NaN === NaN` is `false`.
+- `toFixed()` returns a string.
+- Decimal arithmetic can have floating-point precision errors.

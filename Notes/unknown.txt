@@ -1,0 +1,163 @@
+In TypeScript, when a variable is of type `unknown`, there are some interesting R&D (try-and-test) cases beyond basic declaration, initialization, and reassignment.
+
+## 1. Try these TypeScript examples
+
+### Case 1: Assign `unknown` to another type
+
+ts
+```
+let a: unknown = 10;
+let b: string = a;
+```
+
+❌ Error: Type `unknown` is not assignable to type `string`.
+
+### Case 2: Assign `unknown` to `any`
+
+ts
+```
+let a: unknown = 10;
+let b: any = a;
+```
+
+✅ No error. You can assign `unknown` to `any`.
+
+### Case 3: Assign `any` to `unknown`
+
+ts
+```
+let a: any = "Hello";
+let b: unknown = a;
+```
+
+✅ No error. Any value can be assigned to `unknown`.
+
+### Case 4: Compare an `unknown` variable
+
+ts
+```
+let a: unknown = 10;
+
+console.log(a === 10);
+console.log(a == "10");
+```
+
+✅ No error. Equality comparisons are allowed.
+
+### Case 5: Use `typeof`
+
+ts
+```
+let a: unknown = 100;
+
+console.log(typeof a);
+```
+
+✅ No error. It prints `"number"`.
+
+### Case 6: Perform arithmetic
+
+ts
+```
+let a: unknown = 10;
+
+console.log(a + 5);
+```
+
+❌ Error: You cannot perform arithmetic directly on an `unknown` value.
+
+### Case 7: Use type assertion
+
+ts
+```
+let a: unknown = "Hello";
+
+console.log((a as string).length);
+```
+
+✅ No TypeScript error. The assertion tells TypeScript to treat `a` as a string, but it does not check the value at runtime.
+
+### Case 8: Check whether it is an array
+
+ts
+```
+let a: unknown = [10, 20, 30];
+
+if (Array.isArray(a)) {
+  console.log(a.length);
+}
+```
+
+✅ No error. The check narrows `a` to an array type.
+
+### Case 9: Use `instanceof`
+
+ts
+```
+let a: unknown = new Date();
+
+if (a instanceof Date) {
+  console.log(a.getFullYear());
+}
+```
+
+✅ No error. TypeScript narrows `a` to `Date`.
+
+### Case 10: Call an unknown variable
+
+ts
+```
+let a: unknown = () => console.log("Hello");
+
+a();
+```
+
+❌ Error: An object of type `unknown` is not callable.
+
+## 2. Quick R&D challenge
+
+Try predicting whether each statement produces an error.
+
+Question 1
+
+let x: unknown = 50; console.log(x === 50);
+
+No error
+
+Equality comparisons are allowed for unknown values.
+
+Question 2
+
+let x: unknown = "Hi"; console.log(x.toUpperCase());
+
+Error
+
+You must narrow x to a string before calling string methods.
+
+Question 3
+
+let x: unknown = null; x = 25;
+
+No error
+
+Unknown can hold values of any type.
+
+Question 4
+
+let x: unknown = 10; let y: number = x;
+
+Error
+
+Unknown cannot be assigned to number without narrowing or an assertion.
+
+Question 5
+
+let x: unknown = 10; console.log(x && true);
+
+No error
+
+Logical operators can be used with unknown values.
+
+ Reset challenge
+
+Key rule: `unknown` is safer than `any` because TypeScript forces you to verify the type before using type-specific operations.
